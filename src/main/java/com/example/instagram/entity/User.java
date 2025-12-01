@@ -9,7 +9,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "Users")
+@Table(name = "users")
 @NoArgsConstructor
 public class User extends BaseEntity {
 
@@ -33,7 +33,7 @@ public class User extends BaseEntity {
     private String bio;
 
     @Builder
-    public User(String username, String password, String email, Role role, String bio) {
+    public User(String username, String password, String email,String name, Role role, String bio) {
         this.username = username;
         this.password = password;
         this.email = email;
