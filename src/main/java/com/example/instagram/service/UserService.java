@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 
 public interface UserService {
     User register(SignUpRequest signUpRequest);
+
+    boolean existsByUsername(String username);
 }
