@@ -4,10 +4,14 @@ import com.example.instagram.dto.request.PostCreateRequest;
 import com.example.instagram.dto.response.PostResponse;
 import com.example.instagram.entity.Post;
 
+import java.util.List;
+
 
 public interface PostService {
     PostResponse create(PostCreateRequest postCreateRequest,Long userId);
+    Post findById(Long postId);
+    PostResponse getPost(Long postId);
+    List<PostResponse> getAllPosts();
 
-    PostResponse getPost(Long id);
-    Post findById(Long id);
+    List<PostResponse> getPostsByUsername(String username);
 }

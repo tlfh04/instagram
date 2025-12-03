@@ -18,7 +18,7 @@ public class PostResponse {
     private Long userId;
     private String username;
 
-    public static PostResponse form(Post post) {
+    public static PostResponse from(Post post) {
         return PostResponse.builder()
                 .id(post.getId())
                 .content(post.getContent())
