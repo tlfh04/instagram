@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "users")
 @NoArgsConstructor
 public class User extends BaseEntity {
@@ -42,6 +41,11 @@ public class User extends BaseEntity {
         this.email = email;
         this.name = name;
         this.role = role != null ? role : Role.USER;
+        this.bio = bio;
+    }
+
+    public void updateProfile(String name,String bio) {
+        this.name = name;
         this.bio = bio;
     }
 }
