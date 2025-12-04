@@ -60,4 +60,9 @@ public class PostServiceImpl implements PostService{
 
         return PostResponse.from(post);
     }
+
+    @Override
+    public long countByUserId(Long userId){
+        return postRepository.countByUserId(userId);
+    }
 }

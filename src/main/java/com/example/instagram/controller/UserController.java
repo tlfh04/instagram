@@ -35,6 +35,8 @@ public class UserController {
         List<PostResponse> posts = postService.getPostsByUsername(username);
         model.addAttribute("profile", profile);
         model.addAttribute("posts", posts);
+        boolean isFollowing = followService.isFollowing(userDetails.getId(),profile.getId());
+        model.addAttribute("isFollowing", isFollowing);
         return "user/profile";
     }
 
@@ -42,7 +44,6 @@ public class UserController {
     public String toggleFollow(@PathVariable String username,
                                @AuthenticationPrincipal CustomUserDetails userDetails){
         followService.toggleFollow(userDetails.getId(),username);
-
         return "redirect:/users/"+username;
     }
 }
