@@ -6,6 +6,8 @@ import com.example.instagram.dto.response.ProfileResponse;
 import com.example.instagram.dto.response.UserResponse;
 import com.example.instagram.entity.Role;
 import com.example.instagram.entity.User;
+import com.example.instagram.exception.BusinessException;
+import com.example.instagram.exception.ErrorCode;
 import com.example.instagram.repository.FollowRepository;
 import com.example.instagram.repository.PostRepository;
 import com.example.instagram.repository.UserRepository;
@@ -14,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,12 +51,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow();
+        return userRepository.findById(userId).orElseThrow(()-> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override
     public ProfileResponse getProfile(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         long postCount = postRepository.countByUserId(user.getId());
         long followerCount = followRepository.countByFollowerId(user.getId());
@@ -83,5 +87,12 @@ public class UserServiceImpl implements UserService{
             user.updateProfileImage(imageUrl);
         }
         user.updateProfile(profileUpdateRequest.getName(), profileUpdateRequest.getBio());
+    }
+
+    @Override
+    public List<UserResponse> searchUsers(String keyword) {
+        return userRepository.searchByKeyword(keyword).stream()
+                .map(UserResponse::from)
+                .toList();
     }
 }

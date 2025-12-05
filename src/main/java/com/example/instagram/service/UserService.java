@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface UserService {
     User register(SignUpRequest signUpRequest);
 
@@ -23,4 +25,6 @@ public interface UserService {
     UserResponse getUserById(Long id);
 
     void updateProfile(Long userId, ProfileUpdateRequest profileUpdateRequest, MultipartFile profileImg);
+
+    List<UserResponse> searchUsers(String keyword);
 }

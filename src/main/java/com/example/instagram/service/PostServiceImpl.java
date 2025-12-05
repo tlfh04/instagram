@@ -5,6 +5,8 @@ import com.example.instagram.dto.request.PostCreateRequest;
 import com.example.instagram.dto.response.PostResponse;
 import com.example.instagram.entity.Post;
 import com.example.instagram.entity.User;
+import com.example.instagram.exception.BusinessException;
+import com.example.instagram.exception.ErrorCode;
 import com.example.instagram.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +55,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public Post findById(Long postId) {
-        return postRepository.findById(postId).orElseThrow();
+        return postRepository.findById(postId).orElseThrow(()-> new BusinessException(ErrorCode.POST_NOT_FOUND));
     }
 
     @Override
@@ -120,5 +122,20 @@ public class PostServiceImpl implements PostService{
                 .toList();
 
         return new SliceImpl<>(content,pageable,posts.hasNext());
+    }
+
+    @Override
+    public Slice<PostResponse> searchPosts(String keyword, Pageable pageable) {
+        Slice<Post> posts = postRepository.searchByKeyword(keyword, pageable);
+
+        List<PostResponse> content = posts.getContent().stream()
+                .map(post -> {
+                    long likeCount = likeRepository.countByPostId(post.getId());
+                    long commentCount = commentRepository.countByPostId(post.getId());
+                    return PostResponse.from(post, commentCount, likeCount);
+                })
+                .toList();
+
+        return new SliceImpl<>(content, pageable, posts.hasNext());
     }
 }
